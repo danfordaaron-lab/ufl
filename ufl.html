@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Universe Football League (UFL) Season 1</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        ufl: {
+                            navy: '#0b1329',
+                            blue: '#1e3a8a',
+                            red: '#dc2626',
+                            accent: '#3b82f6',
+                            darkbg: '#030712',
+                            carddark: '#111827',
+                            cardlight: '#ffffff'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .custom-scrollbar::-webkit-scrollbar { width: 6px; height: 6px; }
+        .custom-scrollbar::-webkit-scrollbar-track { background: rgba(0,0,0,0.05); }
+        .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(100,100,100,0.3); border-radius: 3px; }
+    </style>
+</head>
+<body class="bg-gray-50 dark:bg-ufl-darkbg text-gray-900 dark:text-gray-100 min-h-screen flex flex-col transition-colors duration-300">
+
+    <header class="sticky top-0 z-50 bg-white/90 dark:bg-ufl-navy/90 backdrop-blur-md border-b border-gray-200 dark:border-gray-800 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <div class="flex items-center space-x-3 cursor-pointer" onclick="switchTab('scores')">
+                    <div class="w-12 h-12 bg-gradient-to-tr from-red-600 to-blue-600 rounded-xl flex items-center justify-center text-white font-black text-2xl shadow-lg shadow-red-500/20">
+                        UFL
+                    </div>
+                    <div>
+                        <span class="text-xl sm:text-2xl font-black tracking-wider bg-gradient-to-r from-red-500 via-purple-500 to-blue-500 bg-clip-text text-transparent">
+                            UNIVERSE LEAGUE
+                        </span>
+                        <div class="text-xs text-gray-500 dark:text-gray-400 font-semibold tracking-widest uppercase">
+                            Season 1 • Oct 2, 2026 Kickoff
+                        </div>
+                    </div>
+                </div>
+
+                <nav class="hidden md:flex items-center space-x-1 lg:space-x-2 font-medium">
+                    <button onclick="switchTab('scores')" id="nav-scores" class="nav-btn px-4 py-2 rounded-lg text-sm transition-colors bg-red-600 text-white font-bold shadow-md shadow-red-600/30">
+                        <i class="fa-solid fa-bolt mr-2"></i>Scores & Schedule
+                    </button>
+                    <button onclick="switchTab('standings')" id="nav-standings" class="nav-btn px-4 py-2 rounded-lg text-sm transition-colors hover:bg-gray-100 dark:hover:bg-gray-800">
+                        <i class="fa-solid fa-trophy mr-2"></i>Standings
+                    </button>
+                    <button onclick="switchTab('teams')" id="nav-teams" class="nav-btn px-4 py-2 rounded-lg text-sm transition-colors hover:bg-gray-100 dark:hover:bg-gray-800">
+                        <i class="fa-solid fa-shield-halved mr-2"></i>Team Hubs
+                    </button>
+                    <button onclick="switchTab('news')" id="nav-news" class="nav-btn px-4 py-2 rounded-lg text-sm transition-colors hover:bg-gray-100 dark:hover:bg-gray-800">
+                        <i class="fa-solid fa-newspaper mr-2"></i>News
+                    </button>
+                </nav>
+
+                <div class="flex items-center space-x-3">
+                    <button onclick="toggleDarkMode()" class="p-2.5 rounded-xl bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:scale-105 transition-transform" aria-label="Toggle Theme">
+                        <i id="theme-icon" class="fa-solid fa-moon text-lg"></i>
+                    </button>
+                    <button onclick="toggleMobileMenu()" class="md:hidden p-2.5 rounded-xl bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300">
+                        <i class="fa-solid fa-bars text-lg"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div id="mobile-menu" class="hidden md:hidden bg-white dark:bg-ufl-navy border-b border-gray-200 dark:border-gray-800 px-4 pt-2 pb-4 space-y-2">
+            <button onclick="switchTab('scores'); toggleMobileMenu();" class="w-full text-left px-4 py-2.5 rounded-lg text-sm font-semibold hover:bg-gray-100 dark:hover:bg-gray-800">Scores & Schedule</button>
+            <button onclick="switchTab('standings'); toggleMobileMenu();" class="w-full text-left px-4 py-2.5 rounded-lg text-sm font-semibold hover:bg-gray-100 dark:hover:bg-gray-800">Standings</button>
+            <button onclick="switchTab('teams'); toggleMobileMenu();" class="w-full text-left px-4 py-2.5 rounded-lg text-sm font-semibold hover:bg-gray-100 dark:hover:bg-gray-800">Team Hubs</button>
+            <button onclick="switchTab('news'); toggleMobileMenu();" class="w-full text-left px-4 py-2.5 rounded-lg text-sm font-semibold hover:bg-gray-100 dark:hover:bg-gray-800">News</button>
+        </div>
+    </header>
+
+    <div class="bg-gradient-to-r from-red-600 via-rose-600 to-blue-600 text-white text-xs sm:text-sm py-2 px-4 font-bold shadow-inner">
+        <div class="max-w-7xl mx-auto flex items-center justify-between overflow-hidden whitespace-nowrap">
+            <div class="flex items-center space-x-3 animate-pulse">
+                <span class="bg-black/30 px-2.5 py-0.5 rounded uppercase tracking-wider text-xs">SEASON 1 KICKOFF</span>
+                <span>🔥 Week 1 Matchups Live Tomorrow, October 2, 2026! 12-Week Regular Season & 6-Team Playoff Race Underway!</span>
+            </div>
+            <div class="hidden lg:flex items-center space-x-4 text-xs font-semibold opacity-90">
+                <span><i class="fa-solid fa-calendar-days mr-1"></i> Opening Day: Oct 2, 2026</span>
+            </div>
+        </div>
+    </div>
+
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        
+        <!-- SCORES & SCHEDULE TAB -->
+        <section id="tab-scores" class="tab-content space-y-6">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white dark:bg-ufl-carddark p-6 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-sm">
+                <div>
+                    <h1 class="text-2xl sm:text-3xl font-black tracking-tight">UFL Season 1 Schedule</h1>
+                    <p class="text-gray-500 dark:text-gray-400 text-sm mt-1">Select a week to view matchups. Week 1 begins October 2, 2026.</p>
+                </div>
+                <!-- Week Selector Buttons -->
+                <div class="flex items-center space-x-2 overflow-x-auto pb-2 md:pb-0 custom-scrollbar">
+                    <button onclick="selectWeek(1)" id="week-btn-1" class="week-pill px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-red-600 text-white shadow-md shadow-red-600/30 whitespace-nowrap">Week 1</button>
+                    <button onclick="selectWeek(2)" id="week-btn-2" class="week-pill px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 whitespace-nowrap">Week 2</button>
+                    <button onclick="selectWeek(3)" id="week-btn-3" class="week-pill px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 whitespace-nowrap">Week 3</button>
+                    <button onclick="selectWeek(4)" id="week-btn-4" class="week-pill px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 whitespace-nowrap">Week 4</button>
+                    <button onclick="selectWeek(5)" id="week-btn-5" class="week-pill px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 whitespace-nowrap">Week 5</button>
+                    <button onclick="selectWeek(6)" id="week-btn-6" class="week-pill px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 whitespace-nowrap">Week 6</button>
+                    <button onclick="selectWeek(7)" id="week-btn-7" class="week-pill px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 whitespace-nowrap">Week 7</button>
+                    <button onclick="selectWeek(8)" id="week-btn-8" class="week-pill px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 whitespace-nowrap">Week 8</button>
+                    <button onclick="selectWeek(9)" id="week-btn-9" class="week-pill px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 whitespace-nowrap">Week 9</button>
+                    <button onclick="selectWeek(10)" id="week-btn-10" class="week-pill px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 whitespace-nowrap">Week 10</button>
+                    <button onclick="selectWeek(11)" id="week-btn-11" class="week-pill px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 whitespace-nowrap">Week 11</button>
+                    <button onclick="selectWeek(12)" id="week-btn-12" class="week-pill px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 whitespace-nowrap">Week 12</button>
+                </div>
+            </div>
+
+            <div id="schedule-container" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Dynamically populated via JS -->
+            </div>
+        </section>
+
+        <!-- STANDINGS TAB -->
+        <section id="tab-standings" class="tab-content hidden space-y-8">
+            <div class="bg-white dark:bg-ufl-carddark p-6 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                    <h1 class="text-2xl sm:text-3xl font-black tracking-tight">Season 1 Standings</h1>
+                    <p class="text-gray-500 dark:text-gray-400 text-sm mt-1">All 16 teams starting at 0-0. Top 6 teams per conference advance to the playoffs.</p>
+                </div>
+                <div class="flex items-center space-x-2 text-xs font-bold uppercase tracking-wider bg-blue-50 dark:bg-blue-950/50 text-blue-600 dark:text-blue-400 px-4 py-2 rounded-xl border border-blue-200 dark:border-blue-900">
+                    <i class="fa-solid fa-shield-cat mr-1.5"></i> 6-Team Playoff Format
+                </div>
+            </div>
+
+            <!-- NFC Conference -->
+            <div class="space-y-4">
+                <div class="flex items-center space-x-3 border-b border-gray-200 dark:border-gray-800 pb-2">
+                    <div class="w-3 h-6 bg-red-600 rounded-full"></div>
+                    <h2 class="text-xl font-extrabold uppercase tracking-wider">NFC Conference</h2>
+                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6" id="nfc-standings-container">
+                    <!-- Populated via JS -->
+                </div>
+            </div>
+
+            <!-- AFC Conference -->
+            <div class="space-y-4 pt-4">
+                <div class="flex items-center space-x-3 border-b border-gray-200 dark:border-gray-800 pb-2">
+                    <div class="w-3 h-6 bg-blue-600 rounded-full"></div>
+                    <h2 class="text-xl font-extrabold uppercase tracking-wider">AFC Conference</h2>
+                </div>
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6" id="afc-standings-container">
+                    <!-- Populated via JS -->
+                </div>
+            </div>
+        </section>
+
+        <!-- TEAM HUBS TAB -->
+        <section id="tab-teams" class="tab-content hidden space-y-6">
+            <div class="bg-white dark:bg-ufl-carddark p-6 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4">
+                <div>
+                    <h1 class="text-2xl sm:text-3xl font-black tracking-tight">Team Hubs & Schedules</h1>
+                    <p class="text-gray-500 dark:text-gray-400 text-sm mt-1">Select any UFL franchise to inspect their roster info, home stadium, and full schedule.</p>
+                </div>
+                <div class="w-full md:w-72">
+                    <select id="team-selector" onchange="selectTeamFromDropdown(this.value)" class="w-full bg-gray-100 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-xl px-4 py-2.5 text-sm font-semibold focus:outline-none focus:ring-2 focus:ring-red-500">
+                        <!-- Populated via JS -->
+                    </select>
+                </div>
+            </div>
+
+            <div id="team-detail-view" class="space-y-6">
+                <!-- Dynamically populated via JS -->
+            </div>
+        </section>
+
+        <!-- NEWS TAB -->
+        <section id="tab-news" class="tab-content hidden space-y-6">
+            <div class="bg-white dark:bg-ufl-carddark p-6 rounded-2xl border border-gray-200 dark:border-gray-800 shadow-sm">
+                <h1 class="text-2xl sm:text-3xl font-black tracking-tight">UFL League News</h1>
+                <p class="text-gray-500 dark:text-gray-400 text-sm mt-1">Latest updates, power rankings, and team previews for Season 1.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                <article class="bg-white dark:bg-ufl-carddark rounded-2xl border border-gray-200 dark:border-gray-800 overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col">
+                    <div class="h-48 bg-gradient-to-tr from-red-700 to-blue-800 p-6 flex items-end">
+                        <span class="bg-black/40 backdrop-blur-md text-white text-xs px-2.5 py-1 rounded-lg font-bold">PREVIEW</span>
+                    </div>
+                    <div class="p-6 flex flex-col flex-grow">
+                        <div class="text-xs text-gray-500 dark:text-gray-400 font-semibold mb-2">October 1, 2026 • By UFL Staff</div>
+                        <h2 class="text-lg font-bold mb-2">Season 1 Kickoff Preview: Opening Day Set for October 2nd!</h2>
+                        <p class="text-sm text-gray-600 dark:text-gray-300 flex-grow">All 16 teams are gearing up for an electric inaugural season. With 12 weeks of regular-season action and a 6-team playoff bracket per conference, the battle for the championship starts tomorrow!</p>
+                        <button onclick="switchTab('scores')" class="mt-4 text-red-600 dark:text-red-400 font-bold text-sm flex items-center hover:underline">
+                            View Week 1 Matchups <i class="fa-solid fa-arrow-right ml-2 text-xs"></i>
+                        </button>
+                    </div>
+                </article>
+
+                <article class="bg-white dark:bg-ufl-carddark rounded-2xl border border-gray-200 dark:border-gray-800 overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col">
+                    <div class="h-48 bg-gradient-to-tr from-blue-700 to-indigo-900 p-6 flex items-end">
+                        <span class="bg-black/40 backdrop-blur-md text-white text-xs px-2.5 py-1 rounded-lg font-bold">FORMAT</span>
+                    </div>
+                    <div class="p-6 flex flex-col flex-grow">
+                        <div class="text-xs text-gray-500 dark:text-gray-400 font-semibold mb-2">September 28, 2026 • By League Operations</div>
+                        <h2 class="text-lg font-bold mb-2">Understanding the 6-Team Playoff Structure</h2>
+                        <p class="text-sm text-gray-600 dark:text-gray-300 flex-grow">At the conclusion of the 12-week regular season, the top 6 teams in both the NFC and AFC conferences will qualify for postseason glory. Who will secure the first-round byes?</p>
+                        <button onclick="switchTab('standings')" class="mt-4 text-red-600 dark:text-red-400 font-bold text-sm flex items-center hover:underline">
+                            Check Standings <i class="fa-solid fa-arrow-right ml-2 text-xs"></i>
+                        </button>
+                    </div>
+                </article>
+
+                <article class="bg-white dark:bg-ufl-carddark rounded-2xl border border-gray-200 dark:border-gray-800 overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col">
+                    <div class="h-48 bg-gradient-to-tr from-emerald-700 to-teal-900 p-6 flex items-end">
+                        <span class="bg-black/40 backdrop-blur-md text-white text-xs px-2.5 py-1 rounded-lg font-bold">OWNERS HUB</span>
+                    </div>
+                    <div class="p-6 flex flex-col flex-grow">
+                        <div class="text-xs text-gray-500 dark:text-gray-400 font-semibold mb-2">September 25, 2026 • By Commissioner</div>
+                        <h2 class="text-lg font-bold mb-2">Scheduling Reminder for Weeks 2 through 12</h2>
+                        <p class="text-sm text-gray-600 dark:text-gray-300 flex-grow">Team owners are reminded that games for Weeks 2 through 12 are scheduled independently. Be sure to coordinate your matchups and submit them to league officials in advance.</p>
+                        <button onclick="switchTab('teams')" class="mt-4 text-red-600 dark:text-red-400 font-bold text-sm flex items-center hover:underline">
+                            Explore Team Hubs <i class="fa-solid fa-arrow-right ml-2 text-xs"></i>
+                        </button>
+                    </div>
+                </article>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-white dark:bg-ufl-navy border-t border-gray-200 dark:border-gray-800 mt-16 py-12">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col md:flex-row items-center justify-between gap-6 text-center md:text-left">
+            <div>
+                <div class="flex items-center justify-center md:justify-start space-x-3 mb-2">
+                    <div class="w-8 h-8 bg-red-600 rounded-lg flex items-center justify-center text-white font-black text-sm">UFL</div>
+                    <span class="text-lg font-black tracking-wider">UNIVERSE FOOTBALL LEAGUE</span>
+                </div>
+                <p class="text-xs text-gray-500 dark:text-gray-400">© 2026 Universe Football League. Season 1. All rights reserved.</p>
+            </div>
+
+            <!-- Social Media Links -->
+            <div class="flex items-center space-x-4">
+                <a href="https://x.com" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-xl bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-700 dark:text-gray-300 hover:bg-red-600 hover:text-white transition-colors" aria-label="X (Twitter)">
+                    <i class="fa-brands fa-x-twitter"></i>
+                </a>
+                <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-xl bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-700 dark:text-gray-300 hover:bg-red-600 hover:text-white transition-colors" aria-label="Instagram">
+                    <i class="fa-brands fa-instagram"></i>
+                </a>
+                <a href="https://youtube.com" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-xl bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-700 dark:text-gray-300 hover:bg-red-600 hover:text-white transition-colors" aria-label="YouTube">
+                    <i class="fa-brands fa-youtube"></i>
+                </a>
+                <a href="https://tiktok.com" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-xl bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-700 dark:text-gray-300 hover:bg-red-600 hover:text-white transition-colors" aria-label="TikTok">
+                    <i class="fa-brands fa-tiktok"></i>
+                </a>
+                <a href="https://discord.com" target="_blank" rel="noopener noreferrer" class="w-10 h-10 rounded-xl bg-gray-100 dark:bg-gray-800 flex items-center justify-center text-gray-700 dark:text-gray-300 hover:bg-red-600 hover:text-white transition-colors" aria-label="Discord">
+                    <i class="fa-brands fa-discord"></i>
+                </a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Data Structure for Teams
+        const teamsData = {
+            // NFC East
+            "Eagles": { name: "Philadelphia Eagles", conference: "NFC", division: "NFC East", stadium: "Lincoln Financial Field", color: "from-emerald-800 to-teal-900", record: "0-0" },
+            "Cowboys": { name: "Dallas Cowboys", conference: "NFC", division: "NFC East", stadium: "AT&T Stadium", color: "from-blue-900 to-slate-800", record: "0-0" },
+            // NFC South
+            "Saints": { name: "New Orleans Saints", conference: "NFC", division: "NFC South", stadium: "Caesars Superdome", color: "from-amber-700 to-yellow-900", record: "0-0" },
+            "Buccaneers": { name: "Tampa Bay Buccaneers", conference: "NFC", division: "NFC South", stadium: "Raymond James Stadium", color: "from-red-900 to-zinc-900", record: "0-0" },
+            // NFC North
+            "Lions": { name: "Detroit Lions", conference: "NFC", division: "NFC North", stadium: "Ford Field", color: "from-sky-600 to-blue-900", record: "0-0" },
+            "Vikings": { name: "Minnesota Vikings", conference: "NFC", division: "NFC North", stadium: "U.S. Bank Stadium", color: "from-purple-900 to-yellow-600", record: "0-0" },
+            // NFC West
+            "Cardinals": { name: "Arizona Cardinals", conference: "NFC", division: "NFC West", stadium: "State Farm Stadium", color: "from-red-800 to-rose-950", record: "0-0" },
+            "Seahawks": { name: "Seattle Seahawks", conference: "NFC", division: "NFC West", stadium: "Lumen Field", color: "from-slate-900 to-emerald-800", record: "0-0" },
+            
+            // AFC East
+            "Jets": { name: "New York Jets", conference: "AFC", division: "AFC East", stadium: "MetLife Stadium", color: "from-emerald-900 to-stone-900", record: "0-0" },
+            "Dolphins": { name: "Miami Dolphins", conference: "AFC", division: "AFC East", stadium: "Hard Rock Stadium", color: "from-teal-600 to-cyan-900", record: "0-0" },
+            // AFC South
+            "Texans": { name: "Houston Texans", conference: "AFC", division: "AFC South", stadium: "NRG Stadium", color: "from-blue-950 to-red-900", record: "0-0" },
+            "Titans": { name: "Tennessee Titans", conference: "AFC", division: "AFC South", stadium: "Nissan Stadium", color: "from-blue-800 to-sky-950", record: "0-0" },
+            // AFC North
+            "Ravens": { name: "Baltimore Ravens", conference: "AFC", division: "AFC North", stadium: "M&T Bank Stadium", color: "from-purple-950 to-amber-800", record: "0-0" },
+            "Bengals": { name: "Cincinnati Bengals", conference: "AFC", division: "AFC North", stadium: "Paycor Stadium", color: "from-orange-700 to-zinc-900", record: "0-0" },
+            // AFC West
+            "Chiefs": { name: "Kansas City Chiefs", conference: "AFC", division: "AFC West", stadium: "Arrowhead Stadium", color: "from-red-700 to-rose-900", record: "0-0" },
+            "Broncos": { name: "Denver Broncos", conference: "AFC", division: "AFC West", stadium: "Empower Field at Mile High", color: "from-orange-800 to-blue-950", record: "0-0" }
+        };
+
+        // Exact Week 1 matchups from graphic (Home team determines stadium)
+        const week1Matchups = [
+            { away: "Titans", home: "Dolphins", stadium: "Hard Rock Stadium" },
+            { away: "Bengals", home: "Vikings", stadium: "U.S. Bank Stadium" },
+            { away: "Jets", home: "Ravens", stadium: "M&T Bank Stadium" },
+            { away: "Chiefs", home: "Broncos", stadium: "Empower Field at Mile High" },
+            { away: "Eagles", home: "Cowboys", stadium: "AT&T Stadium" },
+            { away: "Seahawks", home: "Texans", stadium: "NRG Stadium" },
+            { away: "Saints", home: "Cardinals", stadium: "State Farm Stadium" },
+            { away: "Lions", home: "Buccaneers", stadium: "Raymond James Stadium" }
+        ];
+
+        let currentActiveTab = 'scores';
+        let currentSelectedWeek = 1;
+
+        function switchTab(tabId) {
+            currentActiveTab = tabId;
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('bg-red-600', 'text-white', 'font-bold', 'shadow-md', 'shadow-red-600/30');
+            });
+            const activeBtn = document.getElementById(`nav-${tabId}`);
+            if(activeBtn) {
+                activeBtn.classList.add('bg-red-600', 'text-white', 'font-bold', 'shadow-md', 'shadow-red-600/30');
+            }
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobile-menu');
+            menu.classList.toggle('hidden');
+        }
+
+        function toggleDarkMode() {
+            const html = document.documentElement;
+            const icon = document.getElementById('theme-icon');
+            if (html.classList.contains('dark')) {
+                html.classList.remove('dark');
+                icon.classList.remove('fa-sun');
+                icon.classList.add('fa-moon');
+            } else {
+                html.classList.add('dark');
+                icon.classList.remove('fa-moon');
+                icon.classList.add('fa-sun');
+            }
+        }
+
+        function selectWeek(weekNum) {
+            currentSelectedWeek = weekNum;
+            for(let i=1; i<=12; i++) {
+                const btn = document.getElementById(`week-btn-${i}`);
+                if(btn) {
+                    if(i === weekNum) {
+                        btn.className = "week-pill px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-red-600 text-white shadow-md shadow-red-600/30 whitespace-nowrap";
+                    } else {
+                        btn.className = "week-pill px-4 py-2 rounded-xl text-xs sm:text-sm font-bold bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 whitespace-nowrap";
+                    }
+                }
+            }
+            renderSchedule(weekNum);
+        }
+
+        function renderSchedule(weekNum) {
+            const container = document.getElementById('schedule-container');
+            container.innerHTML = '';
+
+            if (weekNum === 1) {
+                week1Matchups.forEach(m => {
+                    const awayTeam = teamsData[m.away];
+                    const homeTeam = teamsData[m.home];
+                    
+                    const card = document.createElement('div');
+                    card.className = "bg-white dark:bg-ufl-carddark rounded-2xl border border-gray-200 dark:border-gray-800 p-5 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between";
+                    card.innerHTML = `
+                        <div class="flex items-center justify-between text-xs font-semibold text-gray-500 dark:text-gray-400 mb-4 pb-2 border-b border-gray-100 dark:border-gray-800">
+                            <span><i class="fa-solid fa-location-dot mr-1 text-red-500"></i> ${m.stadium}</span>
+                            <span class="bg-red-50 dark:bg-red-950/50 text-red-600 dark:text-red-400 px-2 py-0.5 rounded font-bold uppercase text-[10px]">Week 1 • Oct 2</span>
+                        </div>
+                        <div class="space-y-3">
+                            <div class="flex items-center justify-between p-3 rounded-xl bg-gray-50 dark:bg-gray-900/50 border border-gray-100 dark:border-gray-800">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr ${awayTeam.color} flex items-center justify-center text-white font-black text-xs shadow-md">${awayTeam.name.substring(0,3).toUpperCase()}</div>
+                                    <div>
+                                        <div class="font-bold text-sm">${awayTeam.name}</div>
+                                        <div class="text-xs text-gray-400">Away • Record: ${awayTeam.record}</div>
+                                    </div>
+                                </div>
+                                <span class="text-sm font-bold text-gray-400">VS</span>
+                            </div>
+                            <div class="flex items-center justify-between p-3 rounded-xl bg-gray-50 dark:bg-gray-900/50 border border-gray-100 dark:border-gray-800">
+                                <div class="flex items-center space-x-3">
+                                    <div class="w-10 h-10 rounded-xl bg-gradient-to-tr ${homeTeam.color} flex items-center justify-center text-white font-black text-xs shadow-md">${homeTeam.name.substring(0,3).toUpperCase()}</div>
+                                    <div>
+                                        <div class="font-bold text-sm">${homeTeam.name}</div>
+                                        <div class="text-xs text-gray-400">Home • Record: ${homeTeam.record}</div>
+                                    </div>
+                                </div>
+                                <span class="text-xs font-semibold text-gray-400 bg-gray-200 dark:bg-gray-800 px-2.5 py-1 rounded-lg">Owner TBD</span>
+                            </div>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            } else {
+                // Weeks 2-12 blank for owners to schedule
+                const notice = document.createElement('div');
+                notice.className = "col-span-1 md:col-span-2 bg-white dark:bg-ufl-carddark rounded-2xl border border-gray-200 dark:border-gray-800 p-12 text-center space-y-4";
+                notice.innerHTML = `
+                    <div class="w-16 h-16 bg-red-50 dark:bg-red-950/50 text-red-600 dark:text-red-400 rounded-2xl flex items-center justify-center mx-auto text-2xl font-black">
+                        <i class="fa-solid fa-calendar-plus"></i>
+                    </div>
+                    <h3 class="text-xl font-bold">Week ${weekNum} Schedule is Blank</h3>
+                    <p class="text-sm text-gray-500 dark:text-gray-400 max-w-md mx-auto">Team owners schedule their own matchups for Weeks 2 through 12. Check back once matchups are locked in!</p>
+                `;
+                container.appendChild(notice);
+            }
+        }
+
+        function renderStandings() {
+            const nfcContainer = document.getElementById('nfc-standings-container');
+            const afcContainer = document.getElementById('afc-standings-container');
+            nfcContainer.innerHTML = '';
+            afcContainer.innerHTML = '';
+
+            const nfcDivisions = { "NFC East": [], "NFC South": [], "NFC North": [], "NFC West": [] };
+            const afcDivisions = { "AFC East": [], "AFC South": [], "AFC North": [], "AFC West": [] };
+
+            Object.keys(teamsData).forEach(key => {
+                const team = teamsData[key];
+                if(team.conference === "NFC") {
+                    if(nfcDivisions[team.division]) nfcDivisions[team.division].push({ id: key, ...team });
+                } else {
+                    if(afcDivisions[team.division]) afcDivisions[team.division].push({ id: key, ...team });
+                }
+            });
+
+            // Render NFC Divisions
+            Object.keys(nfcDivisions).forEach(divName => {
+                const divCard = document.createElement('div');
+                divCard.className = "bg-white dark:bg-ufl-carddark rounded-2xl border border-gray-200 dark:border-gray-800 overflow-hidden shadow-sm";
+                
+                let rowsHtml = '';
+                nfcDivisions[divName].forEach((t, idx) => {
+                    rowsHtml += `
+                        <tr class="border-b border-gray-100 dark:border-gray-800/60 hover:bg-gray-50 dark:hover:bg-gray-900/40 cursor-pointer" onclick="selectTeam('${t.id}')">
+                            <td class="py-3 px-4 flex items-center space-x-3">
+                                <span class="text-xs font-bold text-gray-400 w-4">${idx+1}</span>
+                                <div class="w-7 h-7 rounded-lg bg-gradient-to-tr ${t.color} flex items-center justify-center text-white font-black text-[10px]">${t.name.substring(0,2).toUpperCase()}</div>
+                                <span class="font-bold text-sm">${t.name}</span>
+                            </td>
+                            <td class="py-3 px-4 text-center font-semibold text-sm">0-0</td>
+                            <td class="py-3 px-4 text-center text-gray-500 text-sm">.000</td>
+                        </tr>
+                    `;
+                });
+
+                divCard.innerHTML = `
+                    <div class="bg-gray-50 dark:bg-gray-900/50 px-5 py-3 border-b border-gray-200 dark:border-gray-800 font-extrabold text-xs uppercase tracking-wider text-gray-700 dark:text-gray-300">
+                        ${divName}
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left">
+                            <thead>
+                                <tr class="text-[11px] uppercase tracking-wider text-gray-400 border-b border-gray-100 dark:border-gray-800">
+                                    <th class="py-2 px-4 font-semibold">Team</th>
+                                    <th class="py-2 px-4 font-semibold text-center">Record</th>
+                                    <th class="py-2 px-4 font-semibold text-center">PCT</th>
+                                </tr>
+                            </thead>
+                            <tbody>${rowsHtml}</tbody>
+                        </table>
+                    </div>
+                `;
+                nfcContainer.appendChild(divCard);
+            });
+
+            // Render AFC Divisions
+            Object.keys(afcDivisions).forEach(divName => {
+                const divCard = document.createElement('div');
+                divCard.className = "bg-white dark:bg-ufl-carddark rounded-2xl border border-gray-200 dark:border-gray-800 overflow-hidden shadow-sm";
+                
+                let rowsHtml = '';
+                afcDivisions[divName].forEach((t, idx) => {
+                    rowsHtml += `
+                        <tr class="border-b border-gray-100 dark:border-gray-800/60 hover:bg-gray-50 dark:hover:bg-gray-900/40 cursor-pointer" onclick="selectTeam('${t.id}')">
+                            <td class="py-3 px-4 flex items-center space-x-3">
+                                <span class="text-xs font-bold text-gray-400 w-4">${idx+1}</span>
+                                <div class="w-7 h-7 rounded-lg bg-gradient-to-tr ${t.color} flex items-center justify-center text-white font-black text-[10px]">${t.name.substring(0,2).toUpperCase()}</div>
+                                <span class="font-bold text-sm">${t.name}</span>
+                            </td>
+                            <td class="py-3 px-4 text-center font-semibold text-sm">0-0</td>
+                            <td class="py-3 px-4 text-center text-gray-500 text-sm">.000</td>
+                        </tr>
+                    `;
+                });
+
+                divCard.innerHTML = `
+                    <div class="bg-gray-50 dark:bg-gray-900/50 px-5 py-3 border-b border-gray-200 dark:border-gray-800 font-extrabold text-xs uppercase tracking-wider text-gray-700 dark:text-gray-300">
+                        ${divName}
+                    </div>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left">
+                            <thead>
+                                <tr class="text-[11px] uppercase tracking-wider text-gray-400 border-b border-gray-100 dark:border-gray-800">
+                                    <th class="py-2 px-4 font-semibold">Team</th>
+                                    <th class="py-2 px-4 font-semibold text-center">Record</th>
+                                    <th class="py-2 px-4 font-semibold text-center">PCT</th>
+                                </tr>
+                            </thead>
+                            <tbody>${rowsHtml}</tbody>
+                        </table>
+                    </div>
+                `;
+                afcContainer.appendChild(divCard);
+            });
+        }
+
+        function populateTeamDropdown() {
+            const selector = document.getElementById('team-selector');
+            selector.innerHTML = '';
+            Object.keys(teamsData).forEach(key => {
+                const team = teamsData[key];
+                const opt = document.createElement('option');
+                opt.value = key;
+                opt.textContent = team.name;
+                selector.appendChild(opt);
+            });
+        }
+
+        function selectTeamDropdown(key) {
+            renderTeamHub(key);
+        }
+
+        function selectTeam(key) {
+            document.getElementById('team-selector').value = key;
+            switchTab('teams');
+            renderTeamHub(key);
+        }
+
+        function selectTeamFromDropdown(val) {
+            renderTeamHub(val);
+        }
+
+        function renderTeamHub(key) {
+            const team = teamsData[key];
+            const container = document.getElementById('team-detail-view');
+            
+            // Find if team plays in week 1
+            let week1Opponent = "Bye Week / TBD";
+            week1Matchups.forEach(m => {
+                if(m.away === key) week1Opponent = `vs ${teamsData[m.home].name} (${m.stadium})`;
+                if(m.home === key) week1Opponent = `vs ${teamsData[m.away].name} (${m.stadium})`;
+            });
+
+            container.innerHTML = `
+                <div class="bg-white dark:bg-ufl-carddark rounded-2xl border border-gray-200 dark:border-gray-800 overflow-hidden shadow-sm">
+                    <div class="bg-gradient-to-r ${team.color} p-8 text-white flex flex-col md:flex-row md:items-center justify-between gap-6">
+                        <div class="flex items-center space-x-5">
+                            <div class="w-16 h-16 rounded-2xl bg-black/30 backdrop-blur-md flex items-center justify-center text-white font-black text-2xl shadow-lg border border-white/20">
+                                ${team.name.substring(0,3).toUpperCase()}
+                            </div>
+                            <div>
+                                <div class="text-xs uppercase tracking-widest font-bold opacity-80">${team.conference} • ${team.division}</div>
+                                <h2 class="text-2xl sm:text-3xl font-black">${team.name}</h2>
+                                <div class="text-xs opacity-90 mt-1"><i class="fa-solid fa-location-dot mr-1"></i> Home Venue: ${team.stadium}</div>
+                            </div>
+                        </div>
+                        <div class="bg-black/30 backdrop-blur-md px-6 py-4 rounded-xl border border-white/20 text-center">
+                            <div class="text-xs uppercase tracking-widest font-bold opacity-80">Current Record</div>
+                            <div class="text-2xl font-black">${team.record}</div>
+                        </div>
+                    </div>
+
+                    <div class="p-6 space-y-6">
+                        <h3 class="text-lg font-bold">Season 1 Schedule & Results</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                            <div class="bg-gray-50 dark:bg-gray-900/50 p-4 rounded-xl border border-gray-100 dark:border-gray-800 space-y-2">
+                                <div class="flex justify-between items-center text-xs font-bold text-gray-400">
+                                    <span>WEEK 1 • OCT 2</span>
+                                    <span class="text-red-500">Upcoming</span>
+                                </div>
+                                <div class="font-bold text-sm">${week1Opponent}</div>
+                                <div class="text-xs text-gray-500">Regular Season Opener</div>
+                            </div>
+                            <div class="bg-gray-50 dark:bg-gray-900/50 p-4 rounded-xl border border-gray-100 dark:border-gray-800 space-y-2 opacity-60">
+                                <div class="flex justify-between items-center text-xs font-bold text-gray-400">
+                                    <span>WEEK 2</span>
+                                    <span>Unscheduled</span>
+                                </div>
+                                <div class="font-bold text-sm">To Be Scheduled by Owner</div>
+                                <div class="text-xs text-gray-500">Owner Matchup Pending</div>
+                            </div>
+                            <div class="bg-gray-50 dark:bg-gray-900/50 p-4 rounded-xl border border-gray-100 dark:border-gray-800 space-y-2 opacity-60">
+                                <div class="flex justify-between items-center text-xs font-bold text-gray-400">
+                                    <span>WEEK 3</span>
+                                    <span>Unscheduled</span>
+                                </div>
+                                <div class="font-bold text-sm">To Be Scheduled by Owner</div>
+                                <div class="text-xs text-gray-500">Owner Matchup Pending</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Run on load
+        window.onload = function() {
+            renderSchedule(1);
+            renderStandings();
+            populateTeamDropdown();
+            renderTeamHub("Eagles");
+        };
+    </script>
+</body>
+</html>
